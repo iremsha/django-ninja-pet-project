@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "939f5802-cf38-49bf-ac00-a7dfc9c70eae",
+		"_postman_id": "575c3786-2abd-480f-b061-49b82d9037d9",
 		"name": "tochka",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -17,7 +17,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n                \"status\": 200,\r\n                \"result\": true,\r\n                \"addition\": {\r\n                    \"uuid\": \"26c940a1-7228-4ea2-a3bce6460b172040\",\r\n                    \"chenge\" : 100\r\n                },\r\n                \"description\": {}\r\n}"
+					"raw": "{\r\n                \"status\": 200,\r\n                \"result\": true,\r\n                \"addition\": {\r\n                    \"uuid\": \"26c940a1-7228-4ea2-a3bce6460b172040\",\r\n                    \"change\" : 100\r\n                },\r\n                \"description\": {}\r\n}"
 				},
 				"url": {
 					"raw": "http://127.0.0.1:8000/api/add/",
@@ -51,7 +51,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n                \"status\": 200,\r\n                \"result\": true,\r\n                \"addition\": {\r\n                    \"uuid\": \"26c940a1-7228-4ea2-a3bce6460b172040\",\r\n                    \"chenge\" : 100\r\n                },\r\n                \"description\": {}\r\n}"
+					"raw": "{\r\n                \"status\": 200,\r\n                \"result\": true,\r\n                \"addition\": {\r\n                    \"uuid\": \"26c940a1-7228-4ea2-a3bce6460b172040\",\r\n                    \"change\" : 100\r\n                },\r\n                \"description\": {}\r\n}"
 				},
 				"url": {
 					"raw": "http://127.0.0.1:8000/api/substract/",
@@ -85,7 +85,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n                \"status\": 200,\r\n                \"result\": true,\r\n                \"addition\": {\r\n                    \"uuid\": \"26c940a1-7228-4ea2-a3bce6460b172040\",\r\n                },\r\n                \"description\": {}\r\n}"
+					"raw": "{\r\n                \"status\": 200,\r\n                \"result\": true,\r\n                \"addition\": {\r\n                    \"uuid\": \"26c940a1-7228-4ea2-a3bce6460b172040\"\r\n                },\r\n                \"description\": {}\r\n}"
 				},
 				"url": {
 					"raw": "http://127.0.0.1:8000/api/status/",
