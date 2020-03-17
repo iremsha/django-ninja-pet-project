@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    nginx:
+        build: ./nginx
+        restart: always
+        image: nginx:latest
+        expose:
+          - 8080
+        ports:
+          - "80:8080"
+
+        depends_on:
+            - python
+    python:
+        restart: always
+        build: .
+        expose:
+            - 8000
+        ports:
+            - 8000:8000
+        volumes:
+            - .:/tochka
+        command: bash -c "python /tochka/manage.py runserver 0.0.0.0:8000"
+
+    redis:
+        image: redis:alpine
+        restart: always
+        ports:
+            - '6379:6379'
+
+    celery:
+        build: .
+        volumes:
+            - .:/tochka
+        command: celery -A tochka worker -l info
+        depends_on:
+            - redis
+
+    celery-beat:
+        build: .
+        volumes:
+            - .:/tochka
+        command: celery -A tochka beat -l info
+        depends_on:
+            - redis
