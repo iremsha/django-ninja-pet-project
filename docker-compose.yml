@@ -1,46 +1,51 @@
-version: '3'
+version: "3.4"
+
+x-logging: &x-logging
+  driver: json-file
+  options:
+    tag: "{{.Name}}"
 
 services:
-    nginx:
-        build: ./nginx
-        restart: always
-        image: nginx:latest
-        expose:
-          - 8080
-        ports:
-          - "80:8080"
+  db:
+    container_name: dt-is-backend_db
+    build: ./postgres
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data/
+    logging: *x-logging
 
-        depends_on:
-            - python
-    python:
-        restart: always
-        build: .
-        expose:
-            - 8000
-        ports:
-            - 8000:8000
-        volumes:
-            - .:/tochka
-        command: bash -c "python /tochka/manage.py runserver 0.0.0.0:8000"
+  app:
+    container_name: dt-is-backend_app
+    build: ./src
+    ulimits:
+      nofile:
+        soft: 4096
+        hard: 4096
+    restart: always
+    volumes:
+      - static_volume:/src/static/
+    logging: *x-logging
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command: bash -c '/wait && gunicorn -w 3 --bind :8000 config.wsgi:application'
+    environment:
+      WAIT_HOSTS: db:5432
+      WAIT_HOSTS_TIMEOUT: 120
 
-    redis:
-        image: redis:alpine
-        restart: always
-        ports:
-            - '6379:6379'
+  nginx:
+    container_name: dt-is-backend_nginx
+    build: ./nginx
+    restart: always
+    ports:
+      - ${PORT}:80
+    depends_on:
+      - app
+    volumes:
+      - static_volume:/src/static/
+    logging: *x-logging
 
-    celery:
-        build: .
-        volumes:
-            - .:/tochka
-        command: celery -A tochka worker -l info
-        depends_on:
-            - redis
-
-    celery-beat:
-        build: .
-        volumes:
-            - .:/tochka
-        command: celery -A tochka beat -l info
-        depends_on:
-            - redis
+volumes:
+  db_volume:
+  static_volume:

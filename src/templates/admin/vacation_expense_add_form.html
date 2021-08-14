@@ -1,0 +1,29 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'admin/vacation_expense_add_form.js' %}"></script>
+{% endblock %}
+
+{% block object-tools %}
+
+{% if show_vacation_info %}
+<table class="vacation-expense">
+    <tr>
+        <td><label>Накоплено дней отпуска:</label></td>
+        <td>
+            <input name="vacation-days" value="{{ vacation_days }}" disabled />
+        </td>
+    </tr>
+    <tr>
+        <td><label>Стоимость дня отпуска:</label></td>
+        <td>
+            <input name="vacation-day-cost" value="{{ vacation_day_cost }}" disabled />
+        </td>
+    </tr>
+</table>
+<br />
+{% endif %}
+
+{% endblock %}

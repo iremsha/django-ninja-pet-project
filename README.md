@@ -1,28 +1,55 @@
-# Django & Docker-compose & Nginx & Redis 
+# Docker
+## Install docker
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
-- О формате
+## Install docker-compose
+https://docs.docker.com/compose/install/
 
-В ТЗ было написано, что основным форматом общения является JSON формата:
 
-{
-	“status“ = <http_status>,
-	“result“: <bool:operation_status>,
-	“addition“: {},
-	“description“: {}
+# Nginx
+## http NGINX (host machine)
+```
+server {
+    listen 80;
+    server_name is.doubletapp.ai;
+
+    location / {
+        proxy_pass http://localhost:1345;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+}
+```
+
+## https NGINX (host machine)
+https://certbot.eff.org/lets-encrypt/ubuntuxenial-nginx
+```
+server {
+    listen 80;
+    server_name is.doubletapp.ai;
+    return 301 https://is.doubletapp.ai$request_uri;
 }
 
-то я его применял как в теле запросов post, так и в ответах (да, было немного странно в теле запроса пост писать http статус). В “addition“ было внесено поле “change“ соотвестсвующиее изменению баланса. Так-же хочу отметить, что поле “satus“ принимает значение true и false.
+server {
+    listen 443 ssl;
+    server_name is.doubletapp.ai;
 
-- О запуске
+    ssl_certificate /etc/letsencrypt/live/is.doubletapp.ai/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/is.doubletapp.ai/privkey.pem;
 
-> $ bash start.sh (по умолчанию docker-compose up запускается без ключа -d)
+    location / {
+        proxy_pass http://localhost:1345;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+}
+```
 
-После чего, можем подключаться на localhost:8000
-
-- О cron
-
-Крон реализован через Celery+Redis снятие холда со счёта абонента каждые 10 минут
-
-- Postman
-
-Примеры запросов на все 5 api методов находятся в папочке postman
+### Local .env images example
+```
+IMAGE_DB=dt-is-backend_db
+IMAGE_APP=dt-is-backend_app
+IMAGE_NGINX=dt-is-backend_nginx
+IMAGE_SWAGGER=dt-is-backend_swagger

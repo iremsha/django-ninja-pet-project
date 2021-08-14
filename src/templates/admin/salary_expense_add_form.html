@@ -1,0 +1,51 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'admin/salary_expense_add_form.js' %}"></script>
+{% endblock %}
+
+{% block object-tools %}
+<input type="hidden" name="salary-expense-secret" value="{{ secret }}" />
+<input type="hidden" name="salary-expense-token" value="{{ token }}" />
+
+<p class="errornote toggl-errornote" style="display: none;">
+    Please correct the errors below.
+</p>
+
+<table class="salary-expense" style="display: none;">
+    <tr>
+        <td><label>Ставка за 160 часов:</label></td>
+        <td>
+            <input name="salary-expense-rate" value="" disabled /> <label class='employee-currency-label'></label>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Всего часов:</label></td>
+        <td>
+            <input name="salary-expense-total-hours" value="" disabled /> <label>ч</label>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Сумма за месяц:</label></td>
+        <td>
+            <input name="salary-expense-total-money" value="" disabled /> <label class='employee-currency-label'></label>
+        </td>
+    </tr>
+    <tr>
+        <td><label>Уже запрошено в этом месяце:</label></td>
+        <td>
+            <input name="salary-expense-requested" value="{{ reuquested_salary }}" disabled /> <label class='employee-currency-label'></label>
+        </td>
+    </tr>
+</table>
+
+<br />
+
+<form id='toggl-form' action="/api/employee/toggl" method="POST">
+    <input type="submit" value="Загрузить данные из TOGGL" />
+</form>
+
+<br />
+{% endblock %}
