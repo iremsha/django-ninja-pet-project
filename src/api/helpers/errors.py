@@ -38,16 +38,6 @@ def not_valid_response(errors, status=400):
     }, status=status)
 
 
-def toggl_projects_error_response(errors, status=400):
-    return JsonResponse({
-        'errors': [{
-            'code': Errors.toggle_validation_failed.name,
-            'message': Errors.toggle_validation_failed.value,
-            'keys': errors
-        }]
-    }, status=status)
-
-
 def print_traceback():
     type, value, tb = sys.exc_info()
     print(traceback.format_exception(type, value, tb))

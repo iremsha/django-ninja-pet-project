@@ -11,7 +11,6 @@ def serialize_auth(user):
 
 
 def serialize_user(user):
-    work_status = user.groups.first().name
     avatar = get_path_to_avatar(user)
 
     return dict(
@@ -20,8 +19,5 @@ def serialize_user(user):
         email=user.email,
         first_name=user.first_name,
         last_name=user.last_name,
-        is_admin=user.is_superuser,
-        work_status=work_status,
         avatar=avatar,
-        currency=user.currency
     )
