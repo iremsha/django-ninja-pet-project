@@ -1,4 +1,4 @@
-all: build down migrate collectstatic up update_or_create_user_groups
+all: build down migrate collectstatic up
 
 pull:
 	docker-compose pull

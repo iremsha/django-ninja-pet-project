@@ -14,7 +14,6 @@ import os
 import environ
 import json
 import logging
-from easy_thumbnails.conf import Settings as thumbnail_settings
 from corsheaders.defaults import default_headers
 
 
@@ -27,7 +26,7 @@ env = environ.Env(
     POSTGRES_USER=(str, ''),
     POSTGRES_PASSWORD=(str, ''),
     DEBUG=(bool, False),
-    ALLOWED_HOSTS=(str, ''),
+    ALLOWED_HOSTS=(str, '*'),
 )
 
 SECRET_KEY = env('SECRET_KEY')
@@ -52,22 +51,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'django_celery_beat',
     'django_extensions',
+    
+    # our
     'api',
+
+    # imported
     'admin_reorder',
     'django_better_admin_arrayfield',
-    'easy_thumbnails',
-    'image_cropping',
     'django_cleanup',
     'corsheaders',
     'rangefilter',
     'csp',
     'mptt',
 ]
-
-
-THUMBNAIL_PROCESSORS = ('image_cropping.thumbnail_processors.crop_corners',) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 
 MIDDLEWARE = [
@@ -152,17 +149,6 @@ AWS_LOCATION = env('AWS_LOCATION')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_DEFAULT_ACL = 'public-read'
 
-# Send email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-# EMAIL_PORT = 465
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -170,8 +156,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'js'),
-    # os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static')
 )
 
 MEDIA_URL = '/media/'
@@ -179,8 +164,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 FILE_UPLOAD_PERMISSIONS = 0o644
-
-AUTH_USER_MODEL = 'api.Employee'
 
 DATABASES = {
     'default': {
@@ -193,96 +176,6 @@ DATABASES = {
     }
 }
 
-ADMIN_REORDER = (
-    {
-        'app': 'api',
-        'label': 'Общее',
-        'models': (
-            'api.Client',
-            'api.Project',
-            'api.ProjectComponent',
-            'api.Employee',
-            'api.EmployeeAbsence',
-            'api.ChangesSalary',
-            'api.Equipment',
-            'api.Department',
-        ),
-    },
-    {
-        'app': 'api',
-        'label': 'Доходы',
-        'models': (
-            'api.ClientIncome',
-            'api.ProjectIncome',
-            'api.OtherIncome',
-            'api.IncomeCategory'
-        ),
-    },
-    {
-        'app': 'api',
-        'label': 'Расходы',
-        'models': (
-            'api.SalaryExpense',
-            'api.VacationExpense',
-            'api.SickLeaveExpense',
-            'api.AwardExpense',
-            'api.CorporateExpense',
-            'api.CorporateExpenseCategory',
-        ),
-    },
-    {'app': 'api', 'label': 'Переводы между счетами', 'models': ('api.TransferMoney',)},
-    {
-        'app': 'api',
-        'label': 'Справочники',
-        'models': (
-            'api.ProjectStatus',
-            'api.CompanyAccount',
-            'api.EmployeePhoto',
-            'api.EquipmentType',
-            'api.OperatingSystem',
-            'api.Address',
-            'api.Office',
-        ),
-    },
-    {
-        'app': 'api',
-        'label': 'Admin',
-        'models': (
-            'api.TogglRecord',
-            'auth.Group',
-        ),
-    },
-    {
-        'app': 'api',
-        'label': 'Скилы',
-        'models': (
-            'api.Skill',
-            'api.SkillScore',
-            'api.SkillSection',
-            'api.SkillGroup',
-        ),
-    },
-    {
-        'app': 'api',
-        'label': 'PERIODIC TASKS',
-        'models': (
-            'django_celery_beat.ClockedSchedule',
-            'django_celery_beat.CrontabSchedule',
-            'django_celery_beat.IntervalSchedule',
-            'django_celery_beat.PeriodicTask',
-            'django_celery_beat.SolarSchedule',
-        ),
-    },
-)
-
-DEFAULT_USER_GROUP_NAME = 'Intern'
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672'
-CELERY_RESULT_BACKEND = 'rpc'
-
 APPEND_SLASH = False
-
-DEFAULT_COMPANY_ACCOUNT_ID = env('DEFAULT_COMPANY_ACCOUNT_ID')
 
 logging.basicConfig(level='INFO')

@@ -7,7 +7,7 @@ x-logging: &x-logging
 
 services:
   db:
-    container_name: dt-is-backend_db
+    container_name: ningja-pet-backend_db
     build: ./postgres
     restart: always
     volumes:
@@ -15,7 +15,7 @@ services:
     logging: *x-logging
 
   app:
-    container_name: dt-is-backend_app
+    container_name: ningja-pet-backend_app
     build: ./src
     ulimits:
       nofile:
@@ -35,7 +35,7 @@ services:
       WAIT_HOSTS_TIMEOUT: 120
 
   nginx:
-    container_name: dt-is-backend_nginx
+    container_name: ningja-pet-backend_nginx
     build: ./nginx
     restart: always
     ports:
