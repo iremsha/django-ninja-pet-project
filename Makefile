@@ -79,3 +79,4 @@ piplock:
 	sudo chown -R ${USER} src/Pipfile.lock
 
 .PHONY: all build up down migrate makemigrations dev psql celery celerybeat dev_test update_or_create_user_groups vacation test debug swagger_build swagger_dev dotenv
+.
